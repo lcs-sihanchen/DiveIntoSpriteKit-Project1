@@ -28,6 +28,11 @@ class GameScene: SKScene {
             addChild(particles)
             
         
+        let player = SKSpriteNode(imageNamed: "player-rocket.png")
+            player.position.x = 400
+            addChild(player)
+            // On top of the background and the spacedust
+            player.zPosition = 1
         }
     }
 
