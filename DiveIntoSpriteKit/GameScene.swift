@@ -15,6 +15,7 @@ class GameScene: SKScene {
     // Properties
     let motionManager = CMMotionManager()
     let player = SKSpriteNode(imageNamed: "player-rocket.png")
+    var gameTimer: Timer?
     
     override func didMove(to view: SKView) {
         // this method is called when your game scene is ready to run
@@ -22,38 +23,48 @@ class GameScene: SKScene {
         backGround.zPosition = -1
         addChild(backGround)
         
-       
+        
         
         if let particles = SKEmitterNode(fileNamed: "SpaceDust") {
             
             // Add this line of code to fill the space with space dust "10 seconds" before we launch. (So it would be filled as soon as we launch)
             particles.advanceSimulationTime(10)
-             // Ipad has 1024 points therefore 512 is the right edge of the ipad
+            // Ipad has 1024 points therefore 512 is the right edge of the ipad
             particles.position.x = 512
             // Show on the screen
             addChild(particles)
             
-        
-       
+            
+            
             player.position.x = 400
             addChild(player)
             // On top of the background and the spacedust
             player.zPosition = 1
             
-        // Tilt the device to move
-        // collecting accelerometer data
+            // Tilt the device to move
+            // collecting accelerometer data
             motionManager.startAccelerometerUpdates()
+            
+            // Every 0.35 seconds deploy an asteroid
+            // Target: the game scene
+            // Trigger the function createEnemy()
+            // No user info
+            // Keep Repeating
+            gameTimer = Timer.scheduledTimer(timeInterval: 0.35, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+            
+            
+            
         }
     }
-
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // this method is called when the user touches the screen
     }
-
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // this method is called when the user stops touching the screen
     }
-
+    
     override func update(_ currentTime: TimeInterval) {
         // this method is called before each frame is rendered
         // Gathering data
@@ -63,11 +74,43 @@ class GameScene: SKScene {
             let changeX = CGFloat(accelerometerData.acceleration.y) * 100
             let changeY = CGFloat(accelerometerData.acceleration.x) * 100
             
-            // Update player position for each frame
-            player.position.x = changeX
-            player.position.y = changeY
+            // Update player position for each frame by add and subtract change values
+            player.position.x -= changeX
+            player.position.y += changeY
             
         }
+    }
+    
+    func createEnemy() {
+        
+        
+        // Adding Asteroid sprite node
+        let sprite = SKSpriteNode(imageNamed: "asteroid")
+        
+        // Want Asteroids to appear in random Y positions(a number between -350 to 350)
+        sprite.position = CGPoint(x: 1200, y: Int.random(in: -350...350))
+        
+        // Name the sprite
+        sprite.name = "enemy"
+        
+        // zPosition is the same to the player
+        sprite.zPosition = 1
+        
+        // Show the sprite on the scene
+        addChild(sprite)
+        
+        // Let the asteroid have its physics property: Momentum, Slow down over time
+        // Size: Original sprite size
+        // Texture: the image, the outline?
+        sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
+        
+        // Move the asteroids using velocity tools
+        // Don't want it to move up and down so "y" is 0
+        sprite.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
+        
+        
+        // Disable the friction function in sprite kit
+        sprite.physicsBody?.linearDamping = 0
     }
 }
 
