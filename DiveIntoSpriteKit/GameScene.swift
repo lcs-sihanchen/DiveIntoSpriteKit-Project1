@@ -16,9 +16,18 @@ class GameScene: SKScene {
         backGround.zPosition = -1
         addChild(backGround)
         
+       
+        
         if let particles = SKEmitterNode(fileNamed: "SpaceDust") {
+            
+            // Add this line of code to fill the space with space dust "10 seconds" before we launch. (So it would be filled as soon as we launch)
+            particles.advanceSimulationTime(10)
+             // Ipad has 1024 points therefore 512 is the right edge of the ipad
             particles.position.x = 512
+            // Show on the screen
             addChild(particles)
+            
+        
         }
     }
 
