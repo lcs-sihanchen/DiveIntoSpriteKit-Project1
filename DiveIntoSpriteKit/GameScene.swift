@@ -7,9 +7,15 @@
 //
 
 import SpriteKit
+import CoreMotion
 
 @objcMembers
 class GameScene: SKScene {
+    
+    // Properties
+    let motionManager = CMMotionManager()
+    let player = SKSpriteNode(imageNamed: "player-rocket.png")
+    
     override func didMove(to view: SKView) {
         // this method is called when your game scene is ready to run
         let backGround = SKSpriteNode(imageNamed: "space.jpg")
@@ -28,11 +34,15 @@ class GameScene: SKScene {
             addChild(particles)
             
         
-        let player = SKSpriteNode(imageNamed: "player-rocket.png")
+       
             player.position.x = 400
             addChild(player)
             // On top of the background and the spacedust
             player.zPosition = 1
+            
+        // Tilt the device to move
+        // collecting accelerometer data
+            motionManager.startAccelerometerUpdates()
         }
     }
 
@@ -46,6 +56,18 @@ class GameScene: SKScene {
 
     override func update(_ currentTime: TimeInterval) {
         // this method is called before each frame is rendered
+        // Gathering data
+        if let accelerometerData = motionManager.accelerometerData {
+            
+            // For the player to move 100 times faster than default
+            let changeX = CGFloat(accelerometerData.acceleration.y) * 100
+            let changeY = CGFloat(accelerometerData.acceleration.x) * 100
+            
+            // Update player position for each frame
+            player.position.x = changeX
+            player.position.y = changeY
+            
+        }
     }
 }
 
