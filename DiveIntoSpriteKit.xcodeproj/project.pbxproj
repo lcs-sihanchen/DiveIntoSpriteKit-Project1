@@ -14,8 +14,8 @@
 		51C6E4C91F951D59001794D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51C6E4C71F951D59001794D5 /* Main.storyboard */; };
 		51C6E4CB1F951D59001794D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51C6E4CA1F951D59001794D5 /* Assets.xcassets */; };
 		51C6E4CE1F951D59001794D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51C6E4CC1F951D59001794D5 /* LaunchScreen.storyboard */; };
-		9C1EF8DE242400FE0040005E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C1EF8DC242400FE0040005E /* Assets.xcassets */; };
 		9C1EF8E2242401550040005E /* SpaceDust.sks in Resources */ = {isa = PBXBuildFile; fileRef = 9C1EF8E1242401550040005E /* SpaceDust.sks */; };
+		9C6FA6B52424052D00921BF3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C6FA6B42424052D00921BF3 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,8 +28,8 @@
 		51C6E4CA1F951D59001794D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		51C6E4CD1F951D59001794D5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		51C6E4CF1F951D59001794D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9C1EF8DC242400FE0040005E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9C1EF8E1242401550040005E /* SpaceDust.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = SpaceDust.sks; sourceTree = "<group>"; };
+		9C6FA6B42424052D00921BF3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +46,7 @@
 		51C6E4B11F951D59001794D5 = {
 			isa = PBXGroup;
 			children = (
-				9C1EF8DC242400FE0040005E /* Assets.xcassets */,
+				9C6FA6B42424052D00921BF3 /* Assets.xcassets */,
 				51C6E4BC1F951D59001794D5 /* DiveIntoSpriteKit */,
 				51C6E4BB1F951D59001794D5 /* Products */,
 			);
@@ -138,8 +138,8 @@
 				51C6E4C91F951D59001794D5 /* Main.storyboard in Resources */,
 				51C6E4C01F951D59001794D5 /* GameScene.sks in Resources */,
 				51C6E4CB1F951D59001794D5 /* Assets.xcassets in Resources */,
-				9C1EF8DE242400FE0040005E /* Assets.xcassets in Resources */,
 				9C1EF8E2242401550040005E /* SpaceDust.sks in Resources */,
+				9C6FA6B52424052D00921BF3 /* Assets.xcassets in Resources */,
 				51C6E4CE1F951D59001794D5 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -297,6 +297,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = B5C26XE59E;
 				INFOPLIST_FILE = DiveIntoSpriteKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hackingwithswift.DiveIntoSpriteKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -312,6 +313,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = B5C26XE59E;
 				INFOPLIST_FILE = DiveIntoSpriteKit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.hackingwithswift.DiveIntoSpriteKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
