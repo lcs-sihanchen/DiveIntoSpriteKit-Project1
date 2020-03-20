@@ -17,6 +17,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let motionManager = CMMotionManager()
     let player = SKSpriteNode(imageNamed: "player-rocket.png")
     var gameTimer: Timer?
+    // create a score label
+    let scoreLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
+    
+    // Score label will be updated when score property is set
+    var score = 0 {
+        didSet {
+            scoreLabel.text = "SCORE: \(score)"
+        }
+    }
     
     override func didMove(to view: SKView) {
         // this method is called when your game scene is ready to run
@@ -26,6 +35,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Gathering all the collision data
         physicsWorld.contactDelegate = self
+        
+        // Trigger initial text
+        score = 0
         
         if let particles = SKEmitterNode(fileNamed: "SpaceDust") {
             
@@ -61,7 +73,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             // Player ready for collision
             player.physicsBody?.categoryBitMask = 1
             
-           
+            // Score label is above background, spacedust, rockets and asteroids
+            scoreLabel.zPosition = 2
+            
+            // y position of the label
+            scoreLabel.position.y = 300
+            
+            // Put this on the scene
+            addChild(scoreLabel)
             
         }
     }
@@ -87,6 +106,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             player.position.x -= changeX
             player.position.y += changeY
             
+            // Update the score (a new asteroid is a new frame?)
+            score += 1
         }
     }
     
