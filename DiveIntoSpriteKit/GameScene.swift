@@ -174,8 +174,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    // If player gets hit, rocket is removed from the screen
+    
     func playerHit(_ node: SKNode) {
+        // If player gets hit, rocket is removed from the screen
         player.removeFromParent()
         
         // When player is hit, make an explosion sound
@@ -183,6 +184,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Run an action (play the sound)
         run(sound)
+        
+        // When player is hit, stop playing the music
+        music.removeFromParent()
+        
+        // Game-over picture shown
+        let gameOver = SKSpriteNode(imageNamed: "gameOver-3")
+        // zPosition 10 so it's above everything
+        gameOver.zPosition = 10
+        addChild(gameOver)
     }
 
    
