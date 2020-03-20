@@ -10,7 +10,8 @@ import SpriteKit
 import CoreMotion
 
 @objcMembers
-class GameScene: SKScene {
+// contact delegate is a protocal that the code has to conform
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // Properties
     let motionManager = CMMotionManager()
@@ -23,7 +24,8 @@ class GameScene: SKScene {
         backGround.zPosition = -1
         addChild(backGround)
         
-        
+        // Gathering all the collision data
+        physicsWorld.contactDelegate = self
         
         if let particles = SKEmitterNode(fileNamed: "SpaceDust") {
             
@@ -53,6 +55,13 @@ class GameScene: SKScene {
             gameTimer = Timer.scheduledTimer(timeInterval: 0.35, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
             
             
+            // Add a physics body to the rocket
+            player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
+            
+            // Player ready for collision
+            player.physicsBody?.categoryBitMask = 1
+            
+           
             
         }
     }
@@ -111,6 +120,44 @@ class GameScene: SKScene {
         
         // Disable the friction function in sprite kit
         sprite.physicsBody?.linearDamping = 0
+        
+        // Asteroid ready for collision
+        sprite.physicsBody?.contactTestBitMask = 1
+        
+        // Don't want asteroid collide with other asteroid
+        sprite.physicsBody?.categoryBitMask = 0
     }
+    
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        // These two commands include all the contacts
+        guard let nodeA = contact.bodyA.node else {
+            return
+            
+        }
+        guard let nodeB = contact.bodyB.node else {
+            return
+            
+        }
+        
+        // Special case when one of the nodes is player
+        if nodeA == player {
+            playerHit(nodeB)
+        } else {
+            playerHit(nodeA)
+        }
+    }
+    
+    // If player gets hit, rocket is removed from the screen
+    func playerHit(_ node: SKNode) {
+        player.removeFromParent()
+    }
+
+   
+    
+    
+    
+    
+    
 }
 
