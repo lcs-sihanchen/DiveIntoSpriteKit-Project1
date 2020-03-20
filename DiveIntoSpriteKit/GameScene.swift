@@ -27,6 +27,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    // Add background music node
+    let music = SKAudioNode(fileNamed: "overworld.mp3")
+    
     override func didMove(to view: SKView) {
         // this method is called when your game scene is ready to run
         let backGround = SKSpriteNode(imageNamed: "space.jpg")
@@ -82,6 +85,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             // Put this on the scene
             addChild(scoreLabel)
             
+            // Activating the background music
+            addChild(music)
         }
     }
     
@@ -172,6 +177,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // If player gets hit, rocket is removed from the screen
     func playerHit(_ node: SKNode) {
         player.removeFromParent()
+        
+        // When player is hit, make an explosion sound
+        let sound = SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false)
+        
+        // Run an action (play the sound)
+        run(sound)
     }
 
    
