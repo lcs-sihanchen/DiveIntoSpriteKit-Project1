@@ -9,6 +9,13 @@
 import SpriteKit
 import CoreMotion
 
+// To do list
+// ADD More enemies
+// add a restart button
+// add different levels
+// create bonus
+// fire rockets
+
 @objcMembers
 // contact delegate is a protocal that the code has to conform
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -27,8 +34,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    var touchOnScreen = false
+    var contactWithEnergy = false
     // Add background music node
     let music = SKAudioNode(fileNamed: "overworld.mp3")
+    
+    
     
     override func didMove(to view: SKView) {
         // this method is called when your game scene is ready to run
@@ -87,15 +98,36 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             // Activating the background music
             addChild(music)
+            
+            
         }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // this method is called when the user touches the screen
+        
+        // Make sure it reads first touch
+        guard let touch = touches.first else {
+            return
+        }
+        // MARK: Incomplete
+        let location = touch.location(in: self)
+        let tappedNodes = nodes(at: location)
+        if tappedNodes.contains(player){
+            touchOnScreen = true
+        }
+        
+        
     }
+    
+    
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // this method is called when the user stops touching the screen
+        // Invoke firingEnergy function
+        firingEnergy()
+        touchOnScreen = false
+        contactWithEnergy = false
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -111,16 +143,44 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             player.position.x -= changeX
             player.position.y += changeY
             
-            // Update the score (a new asteroid is a new frame?)
-            score += 1
+            // Update the score for each frame, stop adding when the game is over
+            if player.parent != nil {
+                score += 1
+            }
+            // Make sure the player is not out of the screen
+            // Clamping - limit inside a range
+            if player.position.x < -400 {
+                player.position.x = -400
+            } else if player.position.x > 400 {
+                player.position.x = 400
+            }
+            
+            if player.position.y < -300 {
+                player.position.y = -300
+            } else if player.position.y > 300 {
+                player.position.y = 300
+            }
+            
+            for node in children {
+                // When the asteroids are off screen, remove them
+                if node.position.x < -700 || node.position.x > 1400 {
+                    node.removeFromParent()
+                }
+                
+                
+            }
+            
+            
+            
+            
         }
     }
     
     func createEnemy() {
         
-        
         // Adding Asteroid sprite node
         let sprite = SKSpriteNode(imageNamed: "asteroid")
+        
         
         // Want Asteroids to appear in random Y positions(a number between -350 to 350)
         sprite.position = CGPoint(x: 1200, y: Int.random(in: -350...350))
@@ -169,13 +229,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Special case when one of the nodes is player
         if nodeA == player {
             playerHit(nodeB)
-        } else {
+        } else if nodeB == player {
             playerHit(nodeA)
+            
+        } else {
+            contactWithEnergy = true
         }
     }
     
-    
+    func didEnd(_ contact: SKPhysicsContact) {
+        
+        contactWithEnergy = false
+    }
     func playerHit(_ node: SKNode) {
+        
+        if let particles = SKEmitterNode(fileNamed: "Explosion.sks") {
+            
+            // Explosion over the rocket itself
+            particles.position = player.position
+            particles.zPosition = 3
+            addChild(particles)
+            
+            
+        }
+        
         // If player gets hit, rocket is removed from the screen
         player.removeFromParent()
         
@@ -188,14 +265,72 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // When player is hit, stop playing the music
         music.removeFromParent()
         
-        // Game-over picture shown
+        // Game-over picture shown automatically in the middle
         let gameOver = SKSpriteNode(imageNamed: "gameOver-3")
         // zPosition 10 so it's above everything
         gameOver.zPosition = 10
         addChild(gameOver)
+        
+        // MARK:Maybe a button here
+        // wait for two seconds then run some code(now + 2 seconds)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            // create a new scene from GameScene.sks
+            if let scene = GameScene(fileNamed: "GameScene") {
+                // make it stretch to fill all available space
+                scene.scaleMode = .aspectFill
+                
+                // present it immediately
+                self.view?.presentScene(scene)
+            }
+        }
+        
+        
     }
-
-   
+    
+    
+    
+    func firingEnergy() {
+        
+        
+        let energy = SKSpriteNode(imageNamed: "energy")
+        
+        
+        // zPosition is zero by default
+        energy.zPosition = 0
+        
+        energy.position = CGPoint(x: player.position.x + 100, y: player.position.y)
+        
+        addChild(energy)
+        
+        energy.physicsBody = SKPhysicsBody(texture: energy.texture!, size: energy.size)
+        
+        energy.physicsBody?.velocity = CGVector(dx: 500, dy: 0)
+        energy.physicsBody?.linearDamping = 0
+        energy.physicsBody?.contactTestBitMask = 1
+        
+        
+        
+        for n in 0...200{
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + Double(n) * 0.01){
+                
+                if self.contactWithEnergy == true  {
+                    energy.removeFromParent()
+                    
+                }
+                
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+    }
+    
+    
     
     
     
